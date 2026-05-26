@@ -1,0 +1,129 @@
+{
+    "layer": "top",
+    "position": "top",
+    "margin-top": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    "spacing": 20, /* Spacing between the "Pill" islands */
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/window"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "network",
+        "cpu",
+        "memory",
+        "battery",
+        "pulseaudio",
+        "custom/settings",
+        "custom/notification",
+        "tray"
+    ],
+
+    /* --- Left Modules --- */
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate",
+        "all-outputs": true
+    },
+
+    "hyprland/window": {
+        "format": " {title} ",
+        "max-length": 40,
+        "separate-outputs": true,
+        "rewrite": {
+            "(.*) — Mozilla Firefox": "󰈹 Firefox",
+            "(.*) - Visual Studio Code": "󰨞 VS Code",
+            "kitty": " kitty",
+            "(.*)Overwatch(.*)": "󰊴 Overwatch"
+        }
+    },
+
+    /* --- Center Modules --- */
+    "clock": {
+        "format": " {:%H:%M | %a %d} ",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    /* --- Right Modules --- */
+    "network": {
+        "format-wifi": " {essid}",
+        "format-ethernet": " {ifname}",
+        "format-disconnected": "⚠ Disconnected",
+        "on-click": "kitty --class float_network -e nmtui",
+        "on-click-right": "nm-connection-editor",
+        "tooltip-format": "Signal: {signalStrength}%"
+    },
+
+    "cpu": {
+        "format": " {usage}%",
+        "on-click": "kitty --class float_system_monitor -e btop"
+    },
+
+    "memory": {
+        "format": " {used}G",
+        "on-click": "kitty --class float_system_monitor -e btop"
+    },
+
+    "battery": {
+        "interval": 60,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "on-click": "kitty --class float_system_monitor -e btop",
+        "on-click-right": "~/.config/waybar/scripts/quick-settings.sh"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+
+    /* --- Custom Quick Settings --- */
+    "custom/settings": {
+        "format": " ⚙️ ",
+        "on-click": "~/.config/waybar/scripts/quick-settings.sh",
+        "tooltip": false
+    },
+
+    /* --- SwayNC Notification Center --- */
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10
+    }
+}
