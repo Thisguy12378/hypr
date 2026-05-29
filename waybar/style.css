@@ -97,14 +97,7 @@ window#waybar {
     border-color: rgba(91, 164, 207, 0.13);
 }
 
-#window:empty {
-    opacity: 0;
-    min-width: 0;
-    padding: 0;
-    margin: 0;
-    border: none;
-    box-shadow: none;
-}
+/* waybar hides #window automatically when empty via the config rewrite rules */
 
 /* ── Clock ── */
 #clock {
