@@ -1,34 +1,14 @@
 #!/bin/bash
 
-# ─── Palette ───────────────────────────────────────────────────────────────
-# Torii red: #C0634A   Sky blue: #5BA4CF   Green: #6A9F4E
+# Options for the menu
+options="󰂄 Power Mode\n󰖩 Network (nmtui)\n󰂯 Bluetooth (blueman)\n󰃠 Display (60Hz/165Hz)\n󰤄 Night Light"
 
-separator="─────────────────────"
+chosen=$(echo -e "$options" | rofi -dmenu -i -p " Quick Settings " -config ~/.config/rofi/config.rasi)
 
-options=" Display\n Network\n Bluetooth\n  Volume\n Night Light\n${separator}\n  Shutdown\n  Reboot\n  Suspend\n  Lock\n  Logout"
-
-chosen=$(echo -e "$options" | rofi \
-    -dmenu \
-    -i \
-    -p "  Settings" \
-    -theme-str 'window { width: 340px; border-radius: 16px; }
-                listview { lines: 12; }
-                element-text { color: #2C3E50; }
-                element.selected { background-color: rgba(91,164,207,0.25); }' \
-    2>/dev/null)
-
-[[ -z "$chosen" ]] && exit 0
-
-case "$chosen" in
-    *Display*)
-        # Toggle between 165Hz and 60Hz
-        if hyprctl monitors | grep -q "165.00"; then
-            hyprctl keyword monitor eDP-1,2560x1600@60,auto,1
-            notify-send -i display "Display" "Switched to 60 Hz (battery saver)"
-        else
-            hyprctl keyword monitor eDP-1,2560x1600@165,auto,1
-            notify-send -i display "Display" "Switched to 165 Hz"
-        fi
+case $chosen in
+    *Power*)
+        # Using 'bat' instead of 'battery'
+        sudo tlp bat && notify-send "Power" "TLP: Battery Mode (Throttled)" || sudo tlp ac && notify-send "Power" "TLP: AC Mode (Performance)"
         ;;
     *Network*)
         kitty --class float_network -e nmtui
@@ -36,31 +16,18 @@ case "$chosen" in
     *Bluetooth*)
         blueman-manager
         ;;
-    *Volume*)
-        pavucontrol
-        ;;
-    *Night*)
-        if pgrep -x wlsunset > /dev/null; then
-            pkill wlsunset
-            notify-send "Night Light" "Turned off"
+    *Display*)
+        # Toggle Refresh Rate logic
+        if hyprctl monitors | grep -q "165.00"; then
+            hyprctl keyword monitor eDP-1,2560x1600@60,auto,1
+            notify-send "Display" "Switched to 60Hz"
         else
-            wlsunset -t 4200 -T 6500 &
-            notify-send "Night Light" "Turned on (4200 K)"
+            hyprctl keyword monitor eDP-1,2560x1600@165,auto,1
+            notify-send "Display" "Switched to 165Hz"
         fi
         ;;
-    *Shutdown*)
-        systemctl poweroff
-        ;;
-    *Reboot*)
-        systemctl reboot
-        ;;
-    *Suspend*)
-        systemctl suspend
-        ;;
-    *Lock*)
-        hyprlock
-        ;;
-    *Logout*)
-        hyprctl dispatch exit
+    *Night*)
+        # Requires wlsunset
+        pkill wlsunset || wlsunset -t 4500 &
         ;;
 esac

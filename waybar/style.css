@@ -1,196 +1,128 @@
+/* --- Global Settings --- */
 * {
-    font-family: "JetBrains Mono NF", "Noto Mono", monospace;
-    font-size: 12px;
+    font-family: "JetBrains Mono NF", "Inter", sans-serif;
+    font-size: 13px;
     border: none;
     border-radius: 0;
-    min-height: 0;
-    padding: 0;
-    margin: 0;
 }
 
+/* Make the bar background invisible to allow the pills to float */
 window#waybar {
     background: transparent;
 }
 
-/* ── Base pill style ── */
+/* --- The Pill Island Architecture --- */
+/* This block gives every module the "Floating Island" look */
 #workspaces,
 #window,
 #clock,
 #network,
 #cpu,
 #memory,
-#temperature,
 #battery,
 #pulseaudio,
 #custom-settings,
-#custom-power,
+#custom-notification,
 #tray {
-    background: rgba(10, 12, 18, 0.85);
-    border: 1.5px solid rgba(91, 164, 207, 0.4);
+    background: rgba(15, 15, 15, 0.9); /* Deep charcoal background */
+    border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
     border-radius: 12px;
-    padding: 4px 12px;
-    margin: 3px 4px;
-    color: #d0e8f4;
-    font-weight: 500;
+    padding: 2px 16px;
+    margin: 0 10px; /* Space between the islands */
+    color: #ffffff;
+    font-weight: bold;
+    /* Add a subtle shadow to separate from the wallpaper */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* ── Workspaces ── */
-#workspaces {
-    padding: 3px 6px;
-}
+/* --- Individual Module Adjustments --- */
 
+/* Workspaces: Active tab gets your Cyan border */
 #workspaces button {
-    padding: 2px 10px;
-    color: #526a7a;
-    background: transparent;
-    border-radius: 8px;
-    min-width: 26px;
-    font-weight: 600;
+    padding: 0 5px;
+    color: #ffffff;
 }
 
 #workspaces button.active {
-    color: #5BA4CF;
-    background: rgba(91, 164, 207, 0.2);
-    border-radius: 8px;
-}
-
-#workspaces button.occupied {
-    color: #a0c4dc;
+    color: #00ffff;
+    border-bottom: 2px solid #00ffff;
 }
 
 #workspaces button.urgent {
-    color: #C0634A;
-    background: rgba(192, 99, 74, 0.18);
-    border-radius: 8px;
+    color: #ff5555;
 }
 
-#workspaces button:hover {
-    background: rgba(91, 164, 207, 0.14);
-    color: #d0e8f4;
-    border-radius: 8px;
-}
-
-/* ── Window title ── */
+/* Window Title: Only show if there's space */
 #window {
-    color: #8aafc4;
-    font-style: italic;
-    border-color: rgba(91, 164, 207, 0.25);
+    margin-left: 20px;
+    padding: 0 15px;
+    border: 2px solid rgba(0, 255, 255, 0.3); /* Dim cyan for active app */
 }
 
-#window:empty {
-    opacity: 0;
-}
-
-/* ── Clock ── */
+/* Clock: Centered high-contrast island */
 #clock {
-    color: #EFF6F8;
-    font-weight: 700;
-    font-size: 12px;
-    border-color: rgba(91, 164, 207, 0.65);
-    background: rgba(10, 12, 18, 0.92);
-    letter-spacing: 0.03em;
+    border: 2px solid #ffffff; /* Bright white center island */
+    color: #ffffff;
 }
 
-/* ── Network ── */
-#network {
-    color: #7de8a4;
-}
-
-#network.disconnected {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.5);
-}
-
-/* ── CPU / Memory ── */
-#cpu, #memory {
-    color: #a8d4f0;
-}
-
-/* ── Temperature ── */
-#temperature {
-    color: #a8d4f0;
-}
-
-#temperature.critical {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.6);
-}
-
-/* ── Battery ── */
-#battery {
-    color: #7de8a4;
-}
-
-#battery.charging,
-#battery.plugged {
-    color: #7de8a4;
-    border-color: rgba(125, 232, 164, 0.45);
+/* Battery: Color coding for states */
+#battery.charging, #battery.plugged {
+    color: #00ff99; /* Green while charging */
 }
 
 #battery.warning:not(.charging) {
-    color: #f0c97a;
-    border-color: rgba(240, 201, 122, 0.5);
+    color: #ffcc00;
+    border-color: #ffcc00;
 }
 
 #battery.critical:not(.charging) {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.7);
-    animation: blink 0.9s ease-in-out infinite alternate;
+    color: #ff5555;
+    border-color: #ff5555;
+    animation: blink 0.5s linear infinite alternate;
 }
 
-/* ── Volume ── */
-#pulseaudio {
-    color: #c8d8e4;
-}
-
-#pulseaudio.muted {
-    color: #526a7a;
-}
-
-/* ── Settings ── */
+/* Quick Settings & Notifications: Actionable icons */
 #custom-settings {
-    color: #5BA4CF;
-    border-color: rgba(91, 164, 207, 0.45);
+    color: #00ffff;
 }
 
-#custom-settings:hover {
-    background: rgba(91, 164, 207, 0.16);
-    border-color: rgba(91, 164, 207, 0.75);
+#custom-notification {
+    color: #00ffff;
 }
 
-/* ── Power ── */
-#custom-power {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.5);
-    background: rgba(192, 99, 74, 0.10);
+#custom-notification.notification {
+    background: rgba(0, 255, 255, 0.1);
+    border: 2px solid #00ffff;
 }
 
-#custom-power:hover {
-    background: rgba(192, 99, 74, 0.26);
-    border-color: rgba(192, 99, 74, 0.85);
-}
-
-/* ── Hover ── */
+/* --- Hover Effects --- */
 #network:hover,
 #pulseaudio:hover,
 #battery:hover,
-#cpu:hover,
-#memory:hover,
-#temperature:hover {
-    background: rgba(91, 164, 207, 0.14);
-    border-color: rgba(91, 164, 207, 0.65);
+#custom-settings:hover,
+#custom-notification:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #00ffff;
 }
 
-/* ── Tray ── */
+/* --- Animations --- */
+@keyframes blink {
+    to {
+        background-color: #ff5555;
+        color: #ffffff;
+    }
+}
+
+/* --- System Tray --- */
 #tray {
-    padding: 4px 8px;
+    margin-right: 15px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
 }
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background: rgba(192, 99, 74, 0.18);
-}
-
-@keyframes blink {
-    to { background: rgba(192, 99, 74, 0.22); }
+    background-color: #ff5555;
 }
