@@ -10,185 +10,192 @@
 
 window#waybar {
     background: transparent;
+    border: none;
 }
 
-/* ── Base pill style ── */
+/* ── Pill base ── applies to standalone modules + group containers ── */
 #workspaces,
 #window,
 #clock,
-#network,
-#cpu,
-#memory,
-#temperature,
 #battery,
-#pulseaudio,
-#custom-settings,
+#tray,
 #custom-power,
-#tray {
-    background: rgba(10, 12, 18, 0.85);
-    border: 1.5px solid rgba(91, 164, 207, 0.4);
-    border-radius: 12px;
-    padding: 4px 12px;
-    margin: 3px 4px;
-    color: #d0e8f4;
-    font-weight: 500;
+#media,
+#system {
+    background: rgba(10, 12, 18, 0.88);
+    border: 1px solid rgba(91, 164, 207, 0.22);
+    border-radius: 999px;
+    margin: 4px 3px;
+    color: #cde4f0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Modules inside groups: strip their own pill styling ── */
+#media #pulseaudio,
+#media #network,
+#system #cpu,
+#system #memory,
+#system #temperature {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    box-shadow: none;
+    padding: 5px 11px;
+    color: #cde4f0;
+}
+
+/* Subtle dividers between group items */
+#media #pulseaudio,
+#system #cpu,
+#system #memory {
+    border-right: 1px solid rgba(91, 164, 207, 0.18);
 }
 
 /* ── Workspaces ── */
 #workspaces {
     padding: 3px 6px;
+    border-color: rgba(91, 164, 207, 0.28);
 }
 
 #workspaces button {
-    padding: 2px 10px;
-    color: #526a7a;
     background: transparent;
-    border-radius: 8px;
-    min-width: 26px;
-    font-weight: 600;
+    color: #3d5a6a;
+    border-radius: 999px;
+    padding: 2px 11px;
+    min-width: 24px;
+    font-weight: 700;
+    transition: all 0.15s ease;
+    box-shadow: none;
+    border: none;
 }
 
 #workspaces button.active {
     color: #5BA4CF;
-    background: rgba(91, 164, 207, 0.2);
-    border-radius: 8px;
+    background: rgba(91, 164, 207, 0.22);
 }
 
-#workspaces button.occupied {
-    color: #a0c4dc;
+#workspaces button.occupied:not(.active) {
+    color: #6a9cb8;
 }
 
 #workspaces button.urgent {
     color: #C0634A;
-    background: rgba(192, 99, 74, 0.18);
-    border-radius: 8px;
+    background: rgba(192, 99, 74, 0.2);
 }
 
 #workspaces button:hover {
-    background: rgba(91, 164, 207, 0.14);
-    color: #d0e8f4;
-    border-radius: 8px;
+    background: rgba(91, 164, 207, 0.13);
+    color: #cde4f0;
 }
 
 /* ── Window title ── */
 #window {
-    color: #8aafc4;
+    padding: 5px 18px;
+    color: #6a9cb8;
     font-style: italic;
-    border-color: rgba(91, 164, 207, 0.25);
+    border-color: rgba(91, 164, 207, 0.13);
 }
 
 #window:empty {
     opacity: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-shadow: none;
 }
 
 /* ── Clock ── */
 #clock {
-    color: #EFF6F8;
+    padding: 5px 20px;
     font-weight: 700;
-    font-size: 12px;
-    border-color: rgba(91, 164, 207, 0.65);
+    font-size: 12.5px;
+    color: #eff6f8;
+    border-color: rgba(91, 164, 207, 0.48);
     background: rgba(10, 12, 18, 0.92);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
 }
 
-/* ── Network ── */
-#network {
-    color: #7de8a4;
+/* ── Media group pill ── */
+#media {
+    padding: 0 2px;
 }
 
-#network.disconnected {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.5);
+/* ── System group pill ── */
+#system {
+    padding: 0 2px;
+    border-color: rgba(168, 212, 240, 0.2);
 }
 
-/* ── CPU / Memory ── */
-#cpu, #memory {
-    color: #a8d4f0;
-}
+/* ── Module-specific colours ── */
+#pulseaudio { color: #c8d8e4; }
+#pulseaudio.muted { color: #3d5a6a; }
 
-/* ── Temperature ── */
-#temperature {
-    color: #a8d4f0;
-}
+#network { color: #7de8a4; }
+#network.disconnected { color: #C0634A; }
 
-#temperature.critical {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.6);
-}
+#cpu { color: #a8d4f0; }
+#memory { color: #a8d4f0; }
+#temperature { color: #a8d4f0; }
+#temperature.critical { color: #e07050; }
 
 /* ── Battery ── */
 #battery {
+    padding: 5px 16px;
     color: #7de8a4;
 }
 
 #battery.charging,
 #battery.plugged {
     color: #7de8a4;
-    border-color: rgba(125, 232, 164, 0.45);
+    border-color: rgba(125, 232, 164, 0.38);
 }
 
 #battery.warning:not(.charging) {
     color: #f0c97a;
-    border-color: rgba(240, 201, 122, 0.5);
+    border-color: rgba(240, 201, 122, 0.38);
 }
 
 #battery.critical:not(.charging) {
     color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.7);
+    border-color: rgba(192, 99, 74, 0.6);
     animation: blink 0.9s ease-in-out infinite alternate;
-}
-
-/* ── Volume ── */
-#pulseaudio {
-    color: #c8d8e4;
-}
-
-#pulseaudio.muted {
-    color: #526a7a;
-}
-
-/* ── Settings ── */
-#custom-settings {
-    color: #5BA4CF;
-    border-color: rgba(91, 164, 207, 0.45);
-}
-
-#custom-settings:hover {
-    background: rgba(91, 164, 207, 0.16);
-    border-color: rgba(91, 164, 207, 0.75);
-}
-
-/* ── Power ── */
-#custom-power {
-    color: #C0634A;
-    border-color: rgba(192, 99, 74, 0.5);
-    background: rgba(192, 99, 74, 0.10);
-}
-
-#custom-power:hover {
-    background: rgba(192, 99, 74, 0.26);
-    border-color: rgba(192, 99, 74, 0.85);
-}
-
-/* ── Hover ── */
-#network:hover,
-#pulseaudio:hover,
-#battery:hover,
-#cpu:hover,
-#memory:hover,
-#temperature:hover {
-    background: rgba(91, 164, 207, 0.14);
-    border-color: rgba(91, 164, 207, 0.65);
 }
 
 /* ── Tray ── */
 #tray {
-    padding: 4px 8px;
+    padding: 4px 10px;
+    border-color: rgba(91, 164, 207, 0.15);
 }
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background: rgba(192, 99, 74, 0.18);
+    background: rgba(192, 99, 74, 0.2);
+    border-radius: 999px;
+}
+
+/* ── Power button ── */
+#custom-power {
+    padding: 5px 16px;
+    font-size: 14px;
+    color: #C0634A;
+    border-color: rgba(192, 99, 74, 0.4);
+    background: rgba(192, 99, 74, 0.1);
+}
+
+#custom-power:hover {
+    background: rgba(192, 99, 74, 0.24);
+    border-color: rgba(192, 99, 74, 0.78);
+}
+
+/* ── Hover glow for interactive pills ── */
+#battery:hover,
+#media:hover,
+#system:hover,
+#tray:hover {
+    border-color: rgba(91, 164, 207, 0.5);
+    background: rgba(10, 12, 18, 0.93);
 }
 
 @keyframes blink {
